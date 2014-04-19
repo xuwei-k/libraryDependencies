@@ -10,7 +10,8 @@ object Main {
   def createSVG(org: String, name: String): xml.Elem = {
     val width = "700"
     val height = 50
-    <svg id="body" width={width} height={height.toString} viewBox="-10 -10 500 50" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+    val viewBox = Seq(-10, -10, width, height).mkString(" ")
+    <svg id="body" width={width} height={height.toString} viewBox={viewBox} xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
       <rect x="1" y="1" width={width} height={(height - 4).toString} fill="#EEEEEE" stroke="black" stroke-width="0">
       </rect>
       <text x="5" y={(height / 2).toString} font-family="monospace" font-size="16">"{org}" % "{name}" % "{latestVersion(org, name)}"</text>
@@ -39,7 +40,7 @@ final class Main extends HttpServlet {
       resp.setDateHeader("Expires", 0)
     } catch {
       case e: Throwable =>
-        writer.println(e.toString) 
+        writer.println(e.toString)
         e.getStackTrace.foreach{ stackTrace =>
           writer.print("\tat ")
           writer.println(stackTrace)
